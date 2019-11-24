@@ -3,16 +3,16 @@ spec:
     spec:
       containers:
       - env:
-        - name: SPRING_DATASOURCE_USER
+        - name: SPRING_DATABASE_USER
           valueFrom:
             secretKeyRef:
               name: spring-boot-db-credentials
-              key: database-user
-        - name: SPRING_DATASOURCE_PASSWORD
+              key: database.user
+        - name: SPRING_DATABASE_PASSWORD
           valueFrom:
             secretKeyRef:
               name: spring-boot-db-credentials
-              key: database-password
+              key: database.password
         livenessProbe:
           httpGet:
             path: /actuator/health

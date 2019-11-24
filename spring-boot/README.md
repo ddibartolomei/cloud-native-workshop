@@ -44,6 +44,14 @@ oc new-app registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift~http
 oc logs -f bc/catalog
 ```
 
+### Patch the deployment config to refer to *spring-boot-db-credentials* secret
+```
+oc scale dc/catalog --replicas=0
+oc set env --from=secret/spring-boot-db-credentials  --prefix=SPRING_ dc/catalog
+oc scale dc/catalog --replicas=1
+```
+
+
 ### Create the route
 ```
 oc expose svc/catalog
@@ -53,3 +61,9 @@ oc expose svc/catalog
 ```
 curl http://$(oc get route | grep catalog | awk '{print $2}')/api/catalog
 ```
+
+### Delete all the resources of *catalog* app
+```
+oc delete all -l app=catalog
+```
+
