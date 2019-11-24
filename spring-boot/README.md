@@ -23,8 +23,7 @@ mvn clean fabric8:deploy
 
 ### Test the service
 ```
-export URL="http://$(oc get route | grep catalog | awk '{print $2}')"
-curl $URL/api/catalog
+curl http://$(oc get route | grep catalog | awk '{print $2}')/api/catalog
 ```
 
 ## Running on Openshift from remote git repository
@@ -48,4 +47,9 @@ oc logs -f bc/catalog
 ### Create the route
 ```
 oc expose svc/catalog
+```
+
+### Test the service
+```
+curl http://$(oc get route | grep catalog | awk '{print $2}')/api/catalog
 ```
