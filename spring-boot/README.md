@@ -1,19 +1,22 @@
 # Spring Boot
 
-## Run the application
-
-To run the application locally use:
+## Run the application locally
 
 ```
 mvn clean compile spring-boot:run
 ```
 
-## Create Postgresql instance on Openshift
+## Prerequisites for Openshift deployment
+
+### Add *view* role to the project default service account
+```
+oc policy add-role-to-user view system:serviceaccount:$(oc project -q):default -n $(oc project -q)
+```
+
+### Create PostgreSQL instance on Openshift
 ```
 oc new-app --template=postgresql-ephemeral --param POSTGRESQL_USER=puser --param POSTGRESQL_PASSWORD=ppassword --param POSTGRESQL_DATABASE=pdb --param POSTGRESQL_VERSION=9.6 --name=sb-postgresql
 ```
-
-## Run on Openshift using Fabric8 maven plugin
 
 ### Create a secret for database credentials
 ```
@@ -21,6 +24,15 @@ oc delete secret spring-boot-db-credentials
 
 oc create -f openshift/spring-boot-db-credentials-secret.yml
 ```
+
+### Create the config map
+```
+oc create configmap catalog --from-file=application.properties=openshift/application.properties
+
+oc label cm/catalog app=catalog
+```
+
+## Run on Openshift using Fabric8 maven plugin
 
 ### Deploy using Fabric8
 ```
@@ -34,21 +46,9 @@ curl http://$(oc get route | grep catalog | awk '{print $2}')/api/catalog
 
 ## Running on Openshift from remote git repository
 
-### Create a secret for database credentials
-```
-oc delete secret spring-boot-db-credentials
-
-oc create -f openshift/spring-boot-db-credentials-secret.yml
-```
-
 ### Create the app on OpenShift specifying the base image and the git repository
 ```
 oc new-app registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift~https://github.com/ddibartolomei/cloud-native-workshop.git --context-dir=spring-boot --name=catalog
-```
-
-### Check out build process logs
-```
-oc logs -f bc/catalog
 ```
 
 ### Patch the deployment config to add extra configuration
@@ -62,16 +62,7 @@ oc set probe dc/catalog --liveness --get-url=http://:8080/actuator/health --init
 
 oc set probe dc/catalog --readiness --get-url=http://:8080/actuator/health --initial-delay-seconds=10
 
-oc policy add-role-to-user view system:serviceaccount:$(oc project -q):default -n $(oc project -q)
-
 oc scale dc/catalog --replicas=1
-```
-
-### Create the config map
-```
-oc create configmap catalog --from-file=application.properties=openshift/application.properties
-
-oc label cm/catalog app=catalog
 ```
 
 ### Create the route
@@ -79,12 +70,17 @@ oc label cm/catalog app=catalog
 oc expose svc/catalog
 ```
 
-### Test the service
+## Check out build process logs
+```
+oc logs -f bc/catalog
+```
+
+## Test the service
 ```
 curl http://$(oc get route | grep catalog | awk '{print $2}')/api/catalog
 ```
 
-### Delete all the resources of *catalog* app (to reset all)
+## Delete all the resources of *catalog* app (excluding config map and secret)
 ```
 oc delete all -l app=catalog
 ```
