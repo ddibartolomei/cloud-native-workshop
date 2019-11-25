@@ -1,4 +1,0 @@
-# Startup configuration of Spring-cloud-kubernetes
-spring:
-  application:
-    name: catalog
