@@ -62,6 +62,8 @@ oc set probe dc/catalog --liveness --get-url=http://:8080/actuator/health --init
 
 oc set probe dc/catalog --readiness --get-url=http://:8080/actuator/health --initial-delay-seconds=10
 
+oc policy add-role-to-user view system:serviceaccount:$(oc project -q):default -n $(oc project -q)
+
 oc scale dc/catalog --replicas=1
 ```
 
