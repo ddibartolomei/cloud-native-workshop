@@ -1,0 +1,8 @@
+# Startup configuration of Spring-cloud-kubernetes
+spring:
+  application:
+    name: catalog
+  cloud:
+    kubernetes:
+      reload:
+        enabled: true

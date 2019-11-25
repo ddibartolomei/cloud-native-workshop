@@ -8,11 +8,17 @@ To run the application locally use:
 mvn clean compile spring-boot:run
 ```
 
+## Create Postgresql instance on Openshift
+```
+oc new-app --template=postgresql-ephemeral --param POSTGRESQL_USER=puser --param POSTGRESQL_PASSWORD=ppassword --param POSTGRESQL_DATABASE=pdb --param POSTGRESQL_VERSION=9.6 --name=sb-postgresql
+```
+
 ## Run on Openshift using Fabric8 maven plugin
 
 ### Create a secret for database credentials
 ```
 oc delete secret spring-boot-db-credentials
+
 oc create -f openshift/spring-boot-db-credentials-secret.yml
 ```
 
@@ -31,6 +37,7 @@ curl http://$(oc get route | grep catalog | awk '{print $2}')/api/catalog
 ### Create a secret for database credentials
 ```
 oc delete secret spring-boot-db-credentials
+
 oc create -f openshift/spring-boot-db-credentials-secret.yml
 ```
 
@@ -44,13 +51,26 @@ oc new-app registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift~http
 oc logs -f bc/catalog
 ```
 
-### Patch the deployment config to refer to *spring-boot-db-credentials* secret
+### Patch the deployment config to add extra configuration
+
 ```
 oc scale dc/catalog --replicas=0
+
 oc set env --from=secret/spring-boot-db-credentials  --prefix=SPRING_ dc/catalog
+
+oc set probe dc/catalog --liveness --get-url=http://:8080/actuator/health --initial-delay-seconds=10
+
+oc set probe dc/catalog --readiness --get-url=http://:8080/actuator/health --initial-delay-seconds=10
+
 oc scale dc/catalog --replicas=1
 ```
 
+### Create the config map
+```
+oc create configmap catalog --from-file=application.properties=openshift/application.properties
+
+oc label cm/catalog app=catalog
+```
 
 ### Create the route
 ```
@@ -62,7 +82,7 @@ oc expose svc/catalog
 curl http://$(oc get route | grep catalog | awk '{print $2}')/api/catalog
 ```
 
-### Delete all the resources of *catalog* app
+### Delete all the resources of *catalog* app (to reset all)
 ```
 oc delete all -l app=catalog
 ```
