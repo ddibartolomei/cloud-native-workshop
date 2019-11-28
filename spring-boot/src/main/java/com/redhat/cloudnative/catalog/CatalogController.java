@@ -25,6 +25,15 @@ public class CatalogController {
     }
 
     @ResponseBody
+    @GetMapping(value = "/test/list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ProductList getAll2() {
+        Spliterator<Product> products = repository.findAll().spliterator();
+        ProductList p = new ProductList();
+        p.setProductList(StreamSupport.stream(products, false).collect(Collectors.toList()));
+        return p;
+    }
+
+    @ResponseBody
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public Product getProduct(@PathVariable("id") String id) {
         return repository.findById(id)
