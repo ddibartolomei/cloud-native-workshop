@@ -28,8 +28,8 @@ oc scale dc/catalog --replicas=0
 oc set env --from=secret/spring-boot-db-credentials  --prefix=SPRING_ dc/catalog
 
 # Add probes
-oc set probe dc/catalog --liveness --get-url=http://:8080/actuator/health --initial-delay-seconds=10
-oc set probe dc/catalog --readiness --get-url=http://:8080/actuator/health --initial-delay-seconds=10
+oc set probe dc/catalog --liveness --get-url=http://:8080/actuator/health --initial-delay-seconds=180
+oc set probe dc/catalog --readiness --get-url=http://:8080/actuator/health --initial-delay-seconds=20
 
 # Expose the service
 oc expose svc/catalog

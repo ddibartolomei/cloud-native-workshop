@@ -28,6 +28,9 @@ oc create -f openshift/spring-boot-db-credentials-secret.yml
 ```
 
 ### Create the config map
+
+The application configuration parameters for each deployment environment must be externalized in a config map:
+
 ```
 oc create configmap catalog --from-file=application.properties=openshift/application.properties
 ```

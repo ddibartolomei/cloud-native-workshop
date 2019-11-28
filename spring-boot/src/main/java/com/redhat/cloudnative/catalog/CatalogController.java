@@ -2,6 +2,9 @@ package com.redhat.cloudnative.catalog;
 
 import java.util.*;
 import java.util.stream.*;
+
+import com.redhat.cloudnative.catalog.exception.ProductNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -19,5 +22,12 @@ public class CatalogController {
     public List<Product> getAll() {
         Spliterator<Product> products = repository.findAll().spliterator();
         return StreamSupport.stream(products, false).collect(Collectors.toList());
+    }
+
+    @ResponseBody
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Product getProduct(@PathVariable("id") String id) {
+        return repository.findById(id)
+          .orElseThrow(ProductNotFoundException::new);
     }
 }
