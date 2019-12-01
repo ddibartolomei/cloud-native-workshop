@@ -1,0 +1,1 @@
+INSERT INTO Product (itemId, name, description, price) VALUES ('123456', 'Wilson 3 balls pack', 'Pack with 3 Wilson Extra balls', 5.50);
