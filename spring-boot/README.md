@@ -8,8 +8,6 @@ mvn clean compile spring-boot:run
 
 ## Prerequisites for Openshift deployment
 
-### 
-
 ### Add *view* role to the default service account of the project
 
 The Spring Boot microservice calls the Kubernetes API to retrieve a ConfigMap, which requires *view* access.
@@ -41,6 +39,8 @@ oc create configmap catalog --from-file=application.properties=openshift/applica
 ```
 mvn clean fabric8:deploy
 ```
+
+Readiness probe, liveness probe and environment variables from secret will be set into the deployment config by Fabric8 plugin using the deployment.yml descriptor (src/main/fabric8/deployment.yml).
 
 ## Run on Openshift from remote git repository
 
@@ -78,8 +78,10 @@ oc logs -f bc/catalog
 curl -X GET http://$(oc get route catalog -o template --template='{{.spec.host}}')/api/catalog
 ```
 
-## Delete all the resources of *catalog* app (excluding config map and secret)
+## Delete all the app resources of *catalog* app (excluding the database credentials secret)
 ```
 oc delete all -l app=catalog
+
+oc delete configmap catalog
 ```
 

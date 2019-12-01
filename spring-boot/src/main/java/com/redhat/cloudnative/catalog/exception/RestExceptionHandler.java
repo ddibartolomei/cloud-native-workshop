@@ -1,4 +1,4 @@
-package com.redhat.cloudnative.catalog;
+package com.redhat.cloudnative.catalog.exception;
 
 import com.redhat.cloudnative.catalog.exception.ProductNotFoundException;
 

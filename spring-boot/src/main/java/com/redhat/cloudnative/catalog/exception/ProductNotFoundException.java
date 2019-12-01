@@ -2,9 +2,6 @@ package com.redhat.cloudnative.catalog.exception;
 
 public class ProductNotFoundException extends RuntimeException {
 
-    /**
-     *
-     */
     private static final long serialVersionUID = -8406375915738553296L;
 
     public ProductNotFoundException() {
