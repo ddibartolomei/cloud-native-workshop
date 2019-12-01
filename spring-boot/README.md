@@ -78,6 +78,8 @@ oc logs -f bc/catalog
 curl -X GET http://$(oc get route catalog -o template --template='{{.spec.host}}')/api/catalog
 ```
 
+The Swagger UI is available at the */docs-swagger* relative url.
+
 ## Delete all the app resources of *catalog* app (excluding the database credentials secret)
 ```
 oc delete all -l app=catalog

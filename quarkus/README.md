@@ -73,6 +73,8 @@ curl -X GET http://$(oc get route store-catalog -o template --template='{{.spec.
 curl -k -X POST -H 'Content-Type: application/json' --header 'Accept: application/json' -d '{"itemId": "111111","name": "My product name","description": "My product description", "price": 10.99}' http://$(oc get route store-catalog -o template --template='{{.spec.host}}')/api/store/catalog
 ```
 
+The Swagger UI is available at the */swagger-ui* relative url.
+
 ## Delete all the app resources of *store-catalog* app (excluding the database credentials secret)
 ```
 oc delete all -l app=store-catalog 
