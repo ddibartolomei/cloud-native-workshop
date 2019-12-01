@@ -20,12 +20,12 @@ This provisioning model is based on the template named ***rhpam75-authoring*** w
 ## Importing PAM demo project
 
 Connect to the Business Central using the hostname obtained with the following command:
-
 ```
 oc get route <your-project-name-prefix>-rhpamcentr -o template --template='{{.spec.host}}' -n <your-project-name-prefix>-<your-project-name-suffix>
 ```
 
 Login with admin username and password.
+
 > If not changed during PAM provisioning, they should be *pamAdmin / redhatpam1!*
 
 Import the project from a git repository:
@@ -38,9 +38,16 @@ Import the project from a git repository:
   - In the next page select the found PAM project (*test01*) and click **Import**
 - The imported project with all the assets will be available in the *MySpace* space
 
-## Project contents
+## Project assets
 
-TODO
+- **Approval-Process**: the Business Processes (bpmn file)
+- **Approve-taskform**: Form for Approve task
+- **com_myspace_test01_Product**: Sub Form for showing Product object attributes
+- **Product**: Data Object (a POJO file)
+- **Rest**: Work Item Definition for REST WorkItemHandler Task
+- **test01.process01-taskform**: Form for data input on process start
+- **WorkDefinitions**: descriptor for all supported WorkItem Definitions 
+
 
 ## Cloning the project from the Business Central internal git repository
 
