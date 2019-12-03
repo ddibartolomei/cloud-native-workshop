@@ -1,0 +1,21 @@
+Spring Boot
+SETUP: ./setup-project-and-db.sh rhar-workshop-springboot
+DEPLOY GIT: ./deploy-app-from-git.sh rhar-workshop-springboot https://github.com/ddibartolomei/cloud-native-workshop.git spring-boot
+DEPLOY F8: ./deploy-app-with-fabric8.sh rhar-workshop-springboot
+CLEAN APP: ./clean-app.sh rhar-workshop-springboot
+CLEAN PRJ: oc delete project rhar-workshop-springboot
+
+http://catalog-rhar-workshop-springboot.apps.<OCP-CLUSTER>/api/catalog
+
+
+Quarkus
+SETUP: ./setup-project-and-db.sh rhar-workshop-quarkus
+DEPLOY GIT: ./deploy-app.sh rhar-workshop-quarkus
+CLEAN APP: ./clean-app.sh rhar-workshop-quarkus
+CLEAN PRJ: oc delete project rhar-workshop-quarkus
+
+http://store-catalog-rhar-workshop-quarkus.apps.<OCP-CLUSTER>/api/store/catalog
+
+Add/Update product:
+curl -k -X POST -H 'Content-Type: application/json' --header 'Accept: application/json' -d '{"itemId": "111111","name": "My product name","description": "My product description", "price": 10.99}' http://$(oc get route store-catalog -o template --template='{{.spec.host}}')/api/store/catalog
+
