@@ -38,6 +38,8 @@ Import the project from a git repository:
   - In the next page select the found PAM project (*test01*) and click **Import**
 - The imported project with all the assets will be available in the *MySpace* space
 
+> NB: The business process inside the project (*Approval-Process*) has two service tasks to make REST invocations on the enpoints of the Spring Boot and Quarkus services. The hostname in the *URL* parameter of both the service tasks **must be changed** in order to point to the right routes of the REST services.
+
 ## Project assets
 
 - **Approval-Process**: the Business Processes (bpmn file)
@@ -47,7 +49,6 @@ Import the project from a git repository:
 - **Rest**: Work Item Definition for REST WorkItemHandler Task
 - **test01.process01-taskform**: Form for data input on process start
 - **WorkDefinitions**: descriptor for all supported WorkItem Definitions 
-
 
 ## Cloning the project from the Business Central internal git repository
 
